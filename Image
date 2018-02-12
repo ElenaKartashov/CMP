@@ -1,0 +1,15 @@
+import os
+import datetime
+
+
+class Screenshot ():
+    def captureScreenshot (self, driver):
+        now = datetime.datetime.now()
+        file_path=os.getcwd() + '/scr-'+str(now.strftime("%B-%d-%Y %H-%M-%S"))+".png"
+        print file_path
+        driver.save_screenshot(file_path)
+        return file_path
+
+    def compareImages (self, image, image2):
+        a=1
+        #my code goes here
