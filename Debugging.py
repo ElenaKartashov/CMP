@@ -20,11 +20,11 @@ WebDriverWait = (10)
 
 
 driver = webdriver.Chrome("/Users/Lena/PycharmProjects/First_selenium_test/drivers/chromedriver")
-base_url = ('https://creditcards.chase.com')
+base_url = ('https://primary_link.com')
 
 driver.set_page_load_timeout(20)
 
-driver.get("https://creditcards.chase.com")
+driver.get("https://primary_link.com")
 
 
 def waitElementPresentByCss (timeout, numberAttempts, elementCss):
@@ -46,8 +46,8 @@ def waitElementPresentByCss (timeout, numberAttempts, elementCss):
 
 waitElementPresentByCss (3, 3, '#LearnMore[href*="/cash-back-credit-cards/chase-freedom-unlimited"]')
 
-driver.find_element_by_css_selector('#LearnMore[href*="/cash-back-credit-cards/chase-freedom-unlimited"]').click()
-#driver.find_element_by_css_selector('#LearnMore[href*="/balance-transfer-credit-cards/chase-slate"]').click()
+driver.find_element_by_css_selector('#LearnMore[href*="/unlimited"]').click()
+#driver.find_element_by_css_selector('#LearnMore[href*="/balance"]').click()
 driver.back()
 time.sleep(4)
 driver.forward()
