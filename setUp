@@ -1,0 +1,24 @@
+def setUp(self):
+	self.driver = webdriver.Chrome(executable_path="C:\Python36\chromedriver.exe")
+	driver = self.driver
+	driver.get("http://(здесь название сайта, не могу опубликовать, так как ИБ)/Process/ServiceSelect")
+	driver.send_Keys("логин", Keys.TAB)
+	driver.send_Keys("пароль", Keys.RETURN)
+	driver.find_element_by_xpath("//span[@class='next_arrow-text']").click
+
+def test_selecting_service(self):
+	driver = self.driver
+	service_select = driver.find_element_by_xpath("//a[@href='название сайта/Process/ServiceSelect']").click
+	
+	looking_for = driver.find_element_by_xpath("//input[@id='srch']").click
+	looking_for.send_keys("название объекта на сайте")
+	looking_for.send_keys(Keys.TAB)
+	looking_for.send_keys(Keys.RETURN)
+  
+  
+  
+  ch_opts = webdriver.ChromeOptions()
+ch_opts.add_argument(f"--load-extension={ui_config['pages_config']['chrome_extension']}")
+driver = webdriver.Chrome(executable_path=driver_path,
+                          service_log_path=log_path,
+                          chrome_options=ch_opts)
