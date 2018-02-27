@@ -1,0 +1,20 @@
+from selenium import webdriver
+
+from selenium.webdriver.support.ui import WebDriverWait
+
+import unittest
+
+driver = webdriver
+
+class ValidationCell(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome ("/Users/Lena/PycharmProjects/First_selenium_test/drivers/chromedriver")
+        self.driver.get("https://_____")
+
+    def test_findButton(self):
+        findButton = '#some value"]'
+
+        findButton  = WebDriverWait(driver, 10).until(lambda driver: find_element_by_css_selector(findButton))
+    def tearDown(self):
+        self.driver.quit()
