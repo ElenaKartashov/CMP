@@ -1,0 +1,195 @@
+# -*- coding: utf-8 -*-
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+import pytest
+import pandas as pd
+from selenium.webdriver.support.ui import Select
+import os
+import datetime
+import sys
+import urlparse
+import pandas
+import HTMLTestRunner
+import unittest
+import Images
+import json
+import WebUtilities
+
+base_url = ""
+Screenshot = ""
+
+
+def load_config(path):
+    config_path = os.path.join(path, 'config.json')
+
+    if not os.path.exists(config_path):
+        print('Not found config.json in {}'.format(path))
+        return
+
+    with open(config_path, 'r') as fp:
+        config = json.load(fp)
+
+    return config
+
+
+script_path = os.path.dirname(os.path.abspath('C:\Users\ekartashov\PycharmProjects'))
+
+#print script_path
+
+
+class SmokeTestSuite(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome("C:\Users\ekartashov\PycharmProjects\chromedriver")
+        self.driver.implicitly_wait(10)
+        global Screenshot
+        Screenshot = Images.screenShot()
+
+    def test_fake(self):
+        print "Hi"
+        self.assertEquals(1, 1)
+        # self.driver.quit()
+
+    def test_fake_1(self):
+        print "Hi"
+        self.assertEquals(1, 1)
+        # self.driver.quit()
+
+    def test_navigate(self):
+        global base_url
+        driver = self.driver
+        driver.get(base_url)
+        driver.maximize_window()
+        print 'Navigation'
+
+        username = self.driver.find_element_by_id("Username")
+        # username.clear()
+        password = self.driver.find_element_by_id("Password")
+        # password.clear()
+
+        username.send_keys("sylogent.admin@sylogent.com")
+        password.send_keys("411Sstate")
+        driver.find_element_by_name("btnLogin").click()
+        self.driver.implicitly_wait(10)
+
+        print ("Login was successful")
+
+        global Screenshot
+        last_scr_file_path = Screenshot.captureScreenshot(driver)
+        print ("", last_scr_file_path)
+        driver.find_element_by_name("ps").click()
+
+        print ("Start explore")
+
+        # def test_select_dropdown(self):
+
+        driver.find_element_by_id("ctl00_ctl02_ctl01_productSelector_dropDown").click()
+        Select(driver.find_element_by_id("ctl00_ctl02_ctl01_productSelector_dropDown")).select_by_visible_text(
+            "Amoxicillin")
+        driver.find_element_by_name("ctl00$ctl02$ctl01$segmentSelector$ProgramSegment").click()
+        Select(driver.find_element_by_name(
+            "ctl00$ctl02$ctl01$segmentSelector$ProgramSegment")).select_by_visible_text("Chargers")
+
+        driver.find_element_by_link_text("Tasks").click()
+        # submenu for "Tasks"
+
+
+        driver.find_element_by_id("Active").click()
+        driver.find_element_by_id("Future").click()
+        driver.find_element_by_id("Completed").click()
+        driver.find_element_by_link_text("Projects").click()
+
+        # submenu for "Projects"
+
+
+        driver.find_element_by_link_text("Active").click()
+        driver.find_element_by_link_text("Planned").click()
+        driver.find_element_by_link_text("Done").click()
+        driver.find_element_by_link_text("All").click()
+        driver.find_element_by_link_text("Concept").click()
+        driver.find_element_by_link_text("Create").click()
+
+        driver.find_element_by_link_text("Targets").click()
+
+        # submenu for "Targets"
+
+        driver.find_element_by_link_text("Journals").click()
+        driver.find_element_by_link_text("Conferences").click()
+
+
+        driver.find_element_by_link_text("Studies").click()
+        driver.find_element_by_link_text("Import").click()
+
+        # submenu for "Studies"
+
+        driver.find_element_by_link_text("View").click()
+        driver.find_element_by_link_text("Create").click()
+        driver.find_element_by_link_text("Import").click()
+        driver.find_element_by_link_text("Archive").click()
+        driver.find_element_by_link_text("Clinical Findings").click()
+
+
+        driver.find_element_by_link_text("Resources/Authors").click()
+
+        # submenu for "Resources/Authors"
+        driver.find_element_by_link_text("Documents").click()
+
+        driver.find_element_by_link_text("Reports").click()
+
+        # Report_section_verification (verifecation of each UI element is present,filters completely working and each link is working)
+
+        driver.find_element_by_link_text("Alerts").click()
+        driver.set_page_load_timeout(20)
+
+        driver.find_element_by_link_text("Dashboards").click()
+
+
+        driver.find_element_by_link_text("Calendar").click()
+
+        # Header_menu_verification
+
+        driver.find_element_by_link_text("Feedback").click()
+        driver.find_element_by_link_text("Help").click()
+        driver.find_element_by_link_text("Profile").click()
+        driver.find_element_by_link_text('Logout').click()
+
+        driver.set_page_load_timeout(20)
+
+
+    #def tearDown(self):
+        #print "Smoke Test Suite is over"
+       # self.driver.quit()
+
+def TestRunner(pathToConfig, Env):
+    script_path = os.path.dirname(os.path.abspath(pathToConfig))
+    config = load_config(script_path)
+    global base_url
+
+    base_url = config[Env]
+    print ("Config parent folder: ", script_path)
+    print ("ConfigURL: ", base_url)
+
+    suite = unittest.TestSuite()
+    ##Add additional test suites as classes here:
+    suite.addTests([
+        unittest.defaultTestLoader.loadTestsFromTestCase(SmokeTestSuite)
+    ])
+
+    # Invoke TestRunner
+    dir = os.getcwd()
+    now = datetime.datetime.now()
+    report_file = open(dir + "  PubStrat Full Smoke TestReport" + str(now.strftime("%B-%d-%Y %H-%M-%S")) + ".html", "w")
+    # runner = unittest.TextTestRunner(buf)       #DEBUG: this is the unittest baseline
+    runner = HTMLTestRunner.HTMLTestRunner(
+        stream=report_file,
+        title='   PubStrat Full Smoke TestReport for   ' + base_url,
+        verbosity=0,
+        description='Smoke test suite'
+    )
+    runner.run(suite)
+
+
+TestRunner('C:\Users\ekartashov\PycharmProjects\Specification', "productionUrl")
+# TestRunner ('C:\Users\ekartashov\PycharmProjects\Specification', "hotfixUrl")
+# TestRunner ('C:\Users\ekartashov\PycharmProjects\Specification', "testUrl")
